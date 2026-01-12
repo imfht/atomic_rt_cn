@@ -280,7 +280,12 @@ function escapeHtml(text) {
 }
 
 function analyzeTechnique(techniqueId) {
-    const btn = event.target;
+    if (!window.event) {
+        console.error('Event object not available');
+        return;
+    }
+    
+    const btn = window.event.target;
     btn.disabled = true;
     btn.textContent = '分析中...';
     
@@ -312,7 +317,12 @@ function analyzeTechnique(techniqueId) {
 
 // Sync
 function syncTechniques() {
-    const btn = event.target;
+    if (!window.event) {
+        console.error('Event object not available');
+        return;
+    }
+    
+    const btn = window.event.target;
     const statusDiv = document.getElementById('sync-status');
     const resultsDiv = document.getElementById('sync-results');
     

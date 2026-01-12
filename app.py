@@ -89,8 +89,11 @@ def sync_techniques():
         data = request.get_json() or {}
         technique_ids = data.get('technique_ids', [])
         
+        # Default limit for syncing (configurable via environment or request)
+        default_sync_limit = int(os.getenv('SYNC_LIMIT', '10'))
+        
         if not technique_ids:
-            technique_ids = atomic_service.fetch_technique_list()[:10]  # Limit to 10 for demo
+            technique_ids = atomic_service.fetch_technique_list()[:default_sync_limit]
         
         synced = []
         errors = []

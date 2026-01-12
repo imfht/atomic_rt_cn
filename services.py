@@ -15,8 +15,8 @@ class AtomicRedTeamService:
     def fetch_technique_list(self):
         """Fetch list of available techniques from Atomic Red Team"""
         try:
-            # For demo purposes, return a sample list
-            # In production, this would parse the actual index
+            # TODO: In production, parse the actual index from Atomic Red Team repository
+            # For demo purposes, return a sample list of common techniques
             return [
                 'T1003', 'T1005', 'T1007', 'T1012', 'T1016',
                 'T1018', 'T1021', 'T1027', 'T1036', 'T1047',
@@ -83,13 +83,16 @@ class AtomicRedTeamService:
 class LLMService:
     """Service for integrating with LLM API"""
     
+    # Placeholder value for unconfigured API key
+    PLACEHOLDER_API_KEY = 'your-openai-api-key'
+    
     def __init__(self, api_key, api_base=None, model='gpt-3.5-turbo'):
         self.api_key = api_key
         self.model = model
         self.client = None
         
         # Only initialize client if API key is configured
-        if api_key and api_key != 'your-openai-api-key' and api_key.strip():
+        if api_key and api_key != self.PLACEHOLDER_API_KEY and api_key.strip():
             try:
                 if api_base:
                     self.client = OpenAI(api_key=api_key, base_url=api_base)
