@@ -86,15 +86,23 @@ class LLMService:
     def __init__(self, api_key, api_base=None, model='gpt-3.5-turbo'):
         self.api_key = api_key
         self.model = model
-        if api_base:
-            self.client = OpenAI(api_key=api_key, base_url=api_base)
-        else:
-            self.client = OpenAI(api_key=api_key)
+        self.client = None
+        
+        # Only initialize client if API key is configured
+        if api_key and api_key != 'your-openai-api-key' and api_key.strip():
+            try:
+                if api_base:
+                    self.client = OpenAI(api_key=api_key, base_url=api_base)
+                else:
+                    self.client = OpenAI(api_key=api_key)
+            except Exception as e:
+                print(f"Warning: Failed to initialize OpenAI client: {e}")
+                self.client = None
     
     def analyze_technique(self, technique_data):
         """Use LLM to analyze and summarize attack technique"""
-        if not self.api_key or self.api_key == 'your-openai-api-key':
-            # Return mock data if API key is not configured
+        if not self.client:
+            # Return mock data if API key is not configured or client failed to initialize
             return {
                 'summary': f"这是关于 {technique_data.get('name', 'unknown')} 攻击技术的概要。",
                 'analysis': f"该技术 ({technique_data.get('technique_id', '')}) 的详细分析需要配置 LLM API。"
